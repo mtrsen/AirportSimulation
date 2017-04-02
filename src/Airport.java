@@ -19,10 +19,11 @@ public class Airport implements EventHandler {
     private int runway_number = 5;
     private boolean[] multiple_runway = new boolean[runway_number];
     private PriorityQueue<AirportEvent> eventqueue = new PriorityQueue<>();
+    private boolean containBigPlane;
     // give airport parameters needed
     public Airport(String name, double runwayTimeToLand, double requiredTimeOnGround, double m_takeoffTime,
                    double[]flightTime, int num, int arriv_people,
-                   int depart_people, double circling_time) {
+                   int depart_people, double circling_time, boolean containBigPlane) {
         m_airportName = name;
         m_runwayTimeToLand = runwayTimeToLand;
         m_requiredTimeOnGround = requiredTimeOnGround;
@@ -32,6 +33,7 @@ public class Airport implements EventHandler {
         this.arriv_people = arriv_people;
         this.depart_people = depart_people;
         this.circling_time = circling_time;
+        this.containBigPlane = containBigPlane;
         for (int i = 0; i < multiple_runway.length; i++) {
             multiple_runway[i] = true;
         }
@@ -97,6 +99,7 @@ public class Airport implements EventHandler {
                     eventqueue.add(circlingEvent);
                 }
                 break;
+
             case AirportEvent.PLANE_LANDED:
                 // landed event occurs
                 multiple_runway[airplane1.runway_number - 1] = true;
@@ -111,6 +114,7 @@ public class Airport implements EventHandler {
                         AirportEvent.TAKE_OFF, airplane1, port, cur_passenger);
                 eventqueue.add(departureEvent);
                 break;
+
             case AirportEvent.TAKE_OFF:
                 boolean flag2 = false;
                 for (int i = 0; i < multiple_runway.length; i++) {
@@ -142,6 +146,7 @@ public class Airport implements EventHandler {
                     eventqueue.add(departEvent);
                 }
                 break;
+
             case AirportEvent.PLANE_DEPARTS:
                 // departure event occur
                 multiple_runway[airplane1.runway_number - 1] = true;
@@ -149,11 +154,15 @@ public class Airport implements EventHandler {
                 depart_people += cur_passenger;
                 Random rand = new Random();
                 int next_port_num = rand.nextInt(5);
+
                 // make sure this plane will not depart and arrive at the same airport
-                while (next_port_num == this.number) {
-                    // generate next airport
+
+                while ((airplane1.isBig && !port[next_port_num].containBigPlane) || next_port_num == this.number) {
                     next_port_num = rand.nextInt(5);
-                }
+                } // make sure the next airport could contain this flight
+
+
+
                 DecimalFormat format2 = new DecimalFormat("0.00");
                 System.out.println(format2.format(Simulator.getCurrentTime()) + ": Plane " + airplane1.getName() + " " +
                         airplane1.getM_number() + " departs from airport to " + port[next_port_num].getName());

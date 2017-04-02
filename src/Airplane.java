@@ -10,15 +10,17 @@ public class Airplane {
     private int m_speed;
     private int m_number;
     public int runway_number;
+    public boolean isBig;
     public boolean state = true; //whether the plane is waiting for an opening ot not
 
-    public Airplane(String name, double arrive_time, int capacity, int speed,int m_number) {
+    public Airplane(String name, double arrive_time, int capacity, int speed,int m_number, boolean isBig) {
         // set the parameter for airplane
         m_name = name;
         arr_time = arrive_time;
         this.m_numberPassengers = capacity;
         this.m_speed = speed;
         this.m_number = m_number;
+        this.isBig = isBig;
     }
     public int get_speed() {
         return m_speed;
