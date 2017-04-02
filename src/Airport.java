@@ -16,7 +16,8 @@ public class Airport implements EventHandler {
     private double current;
     private double circling_time;
     private String m_airportName;
-    private int runway_number = 5;
+    private int runway_number = 5; // set runway number to be 5
+    // set 5 boolean runway state
     private boolean[] multiple_runway = new boolean[runway_number];
     private PriorityQueue<AirportEvent> eventqueue = new PriorityQueue<>();
     // give airport parameters needed
@@ -32,6 +33,7 @@ public class Airport implements EventHandler {
         this.arriv_people = arriv_people;
         this.depart_people = depart_people;
         this.circling_time = circling_time;
+        // set all runways state to be true at first
         for (int i = 0; i < multiple_runway.length; i++) {
             multiple_runway[i] = true;
         }
@@ -66,6 +68,7 @@ public class Airport implements EventHandler {
                 }
                 // check if this plane is able to land or not
                 boolean flag = false;
+                // traverse all runways and check which one is ok to land
                 for (int i = 0; i < multiple_runway.length; i++) {
                     if (multiple_runway[i]) {
                         flag = true;
@@ -74,17 +77,16 @@ public class Airport implements EventHandler {
                     }
                 }
                 airplane1.state = true;
+                // if flag is true means at least one of runways is free
                 if (flag) {
                     airplane1.state = false;
                     arriv_people += cur_passenger;
-                    // get current time
-
                     // set the print format
                     DecimalFormat format = new DecimalFormat("0.00");
                     System.out.println(format.format(Simulator.getCurrentTime()) + ":Plane " + airplane1.getName() + " " +
                             airplane1.getM_number()+ " arrived at airport " + this.getName());
                     multiple_runway[airplane1.runway_number - 1] = false;
-
+                    // store which runway this airplane is landing
                     System.out.println("landed in number " + airplane1.runway_number + " runway in " + this.getName());
                     // if runway is free put next event in the eventqueue
                     AirportEvent landingEvent = new AirportEvent(m_runwayTimeToLand, this,
@@ -99,7 +101,7 @@ public class Airport implements EventHandler {
                 break;
             case AirportEvent.PLANE_LANDED:
                 // landed event occurs
-                multiple_runway[airplane1.runway_number - 1] = true;
+                multiple_runway[airplane1.runway_number - 1] = true;// set this runway to be true
                 // get the landed time to calculate circling time
                 airplane1.arr_time = Simulator.getCurrentTime();
                 airplane1.state = false;
