@@ -18,16 +18,16 @@ public class AirportSim {
         // put all the airport in one array
         Airport port[] = new Airport[]{lax, atl, mia, was, sea};
         // generate 16 airplanes
-        for(int i = 0; i < 16; i++) {
+        for(int i = 0; i < 900; i++) {
             Airplane airplane1 = new Airplane("A380", 0, 853, 587, i);
             Airplane airplane2 = new Airplane("B777", 0, 550, 558, i);
-            AirportEvent landingEvent1 = new AirportEvent(0, port[i % 4], AirportEvent.PLANE_ARRIVES, airplane1, port, 0);
-            AirportEvent landingEvent2 = new AirportEvent(0, port[i % 4], AirportEvent.PLANE_ARRIVES, airplane2, port, 0);
+            AirportEvent landingEvent1 = new AirportEvent(0, port[i % 5], AirportEvent.PLANE_ARRIVES, airplane1, port, 0);
+            AirportEvent landingEvent2 = new AirportEvent(0, port[i % 5], AirportEvent.PLANE_ARRIVES, airplane2, port, 0);
             Simulator.schedule(landingEvent1);
             Simulator.schedule(landingEvent2);
         }
 
-        Simulator.stopAt(500);
+        Simulator.stopAt(5000);
         Simulator.run();
         // print the circling time depart people and arrive people
         for(int i = 0; i < port.length; i++){

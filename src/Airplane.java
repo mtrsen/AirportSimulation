@@ -9,6 +9,8 @@ public class Airplane {
     // unit is mile/h
     private int m_speed;
     private int m_number;
+    public int runway_number;
+    public boolean state = true; //whether the plane is waiting for an opening ot not
 
     public Airplane(String name, double arrive_time, int capacity, int speed,int m_number) {
         // set the parameter for airplane
